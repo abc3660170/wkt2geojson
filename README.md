@@ -1,0 +1,2 @@
+# wkt2geojson
+数据库批量查询出来的geometry字段转换成geojson字段方便debug
