@@ -2,6 +2,7 @@ var parse = require('wellknown');
 var fs = require('fs')
 var csvtojson = require('csvtojson');
 var loggerFactory = require('./logConfig')
+var geoTools = require('./geometry-tools')
 const logger = loggerFactory.logger;
 const dataLogger = loggerFactory.dataLogger;
 
@@ -11,7 +12,8 @@ var argv = require('yargs')
     .alias('c', 'datacol').describe('c', 'csv文件第几列为wkt列，from 1 start not 0.')
     .alias('n', 'noheader').boolean('n').describe('n', '是否去掉csv文件的第一行')
     .alias('o', 'outfile').string('o').describe('o', '文件的输出dir')
-    .default({"noHeader":false,"outfile":"./geo.geojson"})
+    .alias('t', 'epsg').string('o').describe('o', '文件的输出dir')
+    .default({"noHeader":false,"outfile":"./geo.geojson","epsg":"4326"})
     .demandOption(['c','d'])
     .parse(process.argv)
 
@@ -22,6 +24,7 @@ var delimiter = argv.d;   // 定义csv 分隔符
 var dataCol = argv.c;     // 定义 wkt数据所在列
 var noHeader = argv.n;   // 是否要去掉第一行数据
 var outfile = argv.o;   // 是否要去掉第一行数据
+var epsg = argv.t  // 默认转换为 lon lat
 
 // 检测文件是否存在
 if(file.length === 0){
@@ -67,6 +70,7 @@ promise.then(function(wktDataArray){
         /*************** 通过 wkt字段 循环生成 geosjon 字段 ****************/
         logger.info('wkt数据转换为geojson阶段......');
         wktDataArray.forEach(function(val){
+            var tempGeojson = parse(val)
             geojsonArray.push(parse(val));
         })
         dataLogger.debug("生成的geojson数组数据：")
