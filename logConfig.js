@@ -1,7 +1,7 @@
 const log4js = require('log4js');
 const logger = log4js.getLogger();
 const dataLogger = log4js.getLogger('data');
-logger.level = 'debug';
+logger.level = 'info';
 dataLogger.level = 'info';
 
 module.exports = {

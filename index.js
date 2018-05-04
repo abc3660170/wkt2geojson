@@ -5,13 +5,37 @@ var loggerFactory = require('./logConfig')
 const logger = loggerFactory.logger;
 const dataLogger = loggerFactory.dataLogger;
 
+var argv = require('yargs')
+    .usage('Usage: $0 <file>  -d [string] -c [num]')
+    .alias('d', 'delimiter').describe('d', 'csv文件的分隔符')
+    .alias('c', 'datacol').describe('c', 'csv文件第几列为wkt列，from 1 start not 0.')
+    .alias('n', 'noheader').boolean('n').describe('n', '是否去掉csv文件的第一行')
+    .alias('o', 'outfile').string('o').describe('o', '文件的输出dir')
+    .default({"noHeader":false,"outfile":"./geo.geojson"})
+    .demandOption(['c','d'])
+    .parse(process.argv)
+
 /*************** 解析csv文件，pick wkt 字段 ****************/
 //todo 这里需要从命令行取得
-var file  = 'test/input/wkt.csv';
-var delimiter = ";";   // 定义csv 分隔符
-var dataCol = "3";     // 定义 wkt数据所在列
-var noHeader = true;   // 是否要去掉第一行数据
-var outfile = "./test/output/geo.geojson";   // 是否要去掉第一行数据
+var file  = argv._.slice(2);
+var delimiter = argv.d;   // 定义csv 分隔符
+var dataCol = argv.c;     // 定义 wkt数据所在列
+var noHeader = argv.n;   // 是否要去掉第一行数据
+var outfile = argv.o;   // 是否要去掉第一行数据
+
+// 检测文件是否存在
+if(file.length === 0){
+    logger.error("没有检测的csv文件输入！")
+    process.exit(1)
+}else{
+    fs.access(file[0], fs.constants.R_OK, (err) => {
+        if(err){
+            logger.error("文件无法访问或不存在！",err)
+            process.exit(1)
+        }
+    });
+}
+file = file[0]
 
 // 临时数据集
 var wktDataArray = [];
@@ -114,6 +138,8 @@ promise.then(function(wktDataArray){
         if (err) throw err;
         console.log('The file has been saved!');
     });
+}).catch(function(reason){
+    logger.error(reason)
 })
 
 

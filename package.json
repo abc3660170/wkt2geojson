@@ -2,7 +2,7 @@
   "name": "wkb2geojson",
   "version": "0.0.1",
   "description": "transform wkb to geojson",
-  "repository":{
+  "repository": {
     "type": "git",
     "url": "git://github.com/abc3660170/wkt2geojson.git"
   },
@@ -15,6 +15,7 @@
   "dependencies": {
     "csvtojson": "^1.1.9",
     "log4js": "^2.5.3",
-    "wellknown": "^0.5.0"
+    "wellknown": "^0.5.0",
+    "yargs": "^11.0.0"
   }
 }
