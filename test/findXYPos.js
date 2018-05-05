@@ -82,6 +82,6 @@ var data = {
     ]
 }
 
-findPOS(data.features[0].geometry,function(res){
+findPOS(data.features[0].geometry.coordinates,function(res){
     console.log(res)
 })

@@ -29,13 +29,15 @@ var meters2degress = function(x,y) {
  * @param geojson
  * @param callback
  */
-var findXYPos = function(geojson,callback){
-    var arr = geojson.coordinates;
-    _findXYPos.call(null,[],arr,callback)
-
+var findXYPos = function(coordinates,callback){
+    _findXYPos.call(null,[],coordinates,callback)
 }
 
 function _findXYPos(parentArr,arr,callback){
+    if(arr.length === 2 && typeof arr[0] === 'number' && typeof arr[1] === 'number'){
+        callback([])
+        return;
+    }
     arr.forEach(function(subArr,index){
         let _parentArr = [].concat(parentArr);
         _parentArr.push(index)
