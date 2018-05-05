@@ -19,7 +19,6 @@ var argv = require('yargs')
     .parse(process.argv)
 
 /*************** 解析csv文件，pick wkt 字段 ****************/
-//todo 这里需要从命令行取得
 var file  = argv._.slice(2);
 var delimiter = argv.d;   // 定义csv 分隔符
 var dataCol = argv.c;     // 定义 wkt数据所在列
